@@ -1,0 +1,10 @@
+#!/bin/bash
+
+discord_webhook='input webhook address'
+grep_args='<|joined|left|connect|UUID|RCON|logged|WARN|Killed|Rcon|ServerLevel|advancement|minecraft_server|java|Authenticator|ERROR|recipes|ResourceManager|Gave|reached|Stopping|Saving|ChunkStorage|Default|Preparing|Loading|Generating|Using|help|elapsed|accountsHost|inaccessible|appeared|0.05|remote|25565|Starting|Scanning|already|file|datafixer'
+mc_log='input minecraft latest log location'
+
+tail -F -n0 $mc_log 2>&1 | stdbuf -o0 grep -Ev "$grep_args" | stdbuf -o0 cut -c 34- | while read death_msg
+do
+        curl -H "Content-Type: application/json" -X POST -d '{"content": "`'"$death_msg"'`"}' $discord_webhook
+done
