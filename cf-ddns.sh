@@ -10,7 +10,7 @@ CURRENT_RECORDv4=$(dig @1.1.1.1 +short $RECORD_NAME)
 RECORD_TYPEv4='A'
 RECORD_IDv4=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records?type=A&name=$RECORD_NAME" \
     -H "Authorization: Bearer $TOKEN" \
-    -H "Content-Type: application/json")
+    -H "Content-Type: application/json" | grep -o '"id":"[^"]*' | cut -d'"' -f4)
 
 #IPV6
 PUBLIC_IP=$(curl -s icanhazip.com)
@@ -18,7 +18,7 @@ CURRENT_RECORD=$(dig @1.1.1.1 AAAA +short $RECORD_NAME)
 RECORD_TYPE='AAAA'
 RECORD_ID=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records?type=AAAA&name=$RECORD_NAME" \
     -H "Authorization: Bearer $TOKEN" \
-    -H "Content-Type: application/json")
+    -H "Content-Type: application/json"  | grep -o '"id":"[^"]*' | cut -d'"' -f4)
 
 DATA_JSON="{\"type\":\"$RECORD_TYPE\",\"name\":\"$RECORD_NAME\",\"content\":\"$PUBLIC_IP\"}"
 
