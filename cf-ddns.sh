@@ -9,14 +9,15 @@ RECORD_NAME='example.com'
 #IPV4
 #PUBLIC_IP=$(curl -s 'ipv4.icanhazip.com')
 #CURRENT_RECORD=$(dig @1.1.1.1 +short $RECORD_NAME)
+#RECORD_TYPE='A'
 
 #IPV6
 PUBLIC_IP=$(curl -s icanhazip.com)
 CURRENT_RECORD=$(dig @1.1.1.1 AAAA +short $RECORD_NAME)
+RECORD_TYPE='AAAA'
 
 
-#change AAAA to A for ipv4
-data_json="{\"type\":\"AAAA\",\"name\":\"$RECORD_NAME\",\"content\":\"$PUBLIC_IP\"}"
+data_json="{\"type\":\"$RECORD_TYPE\",\"name\":\"$RECORD_NAME\",\"content\":\"$PUBLIC_IP\"}"
 
 
 if [[ $CURRENT_RECORD = $PUBLIC_IP ]]
