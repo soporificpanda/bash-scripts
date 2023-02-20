@@ -32,21 +32,17 @@ else
           --header 'Content-Type: application/json' \
           --header "Authorization: Bearer $TOKEN" \
           --data $DATA_JSON
-        
-        echo "IPv6 update attempted"
 fi
 
-DATA_JSONv4="{\"type\":\"$RECORD_TYPEv4\",\"name\":\"$RECORD_NAMEv4\",\"content\":\"$PUBLIC_IPv4\"}"
+DATA_JSONv4="{\"type\":\"$RECORD_TYPEv4\",\"name\":\"$RECORD_NAME\",\"content\":\"$PUBLIC_IPv4\"}"
 
 if [[ $CURRENT_RECORDv4 = $PUBLIC_IPv4 ]]
 then
         echo "IPv4 is OK"
 else
         curl --request PUT \
-          --url https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records/$RECORD_ID \
+          --url https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records/$RECORD_IDv4 \
           --header 'Content-Type: application/json' \
           --header "Authorization: Bearer $TOKEN" \
           --data $DATA_JSONv4
-        
-        echo "IPv4 update attempted"
 fi
