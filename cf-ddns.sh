@@ -25,29 +25,28 @@ DATA_JSON="{\"type\":\"$RECORD_TYPE\",\"name\":\"$RECORD_NAME\",\"content\":\"$P
 
 if [[ $CURRENT_RECORD = $PUBLIC_IP ]]
 then
-        echo "IPv6 was already up to date" | tee ~/cf-ddns/cf-ddns.log
-        echo "$CURRENT_RECORD = DNS" | tee -a ~/cf-ddns/cf-ddns.log
-        echo "$PUBLIC_IP = Public IP" | tee -a ~/cf-ddns/cf-ddns.log
-        echo "----------------------------------" | tee -a ~/cf-ddns/cf-ddns.log
+        echo "IPv6 is OK"
 else
         curl --request PUT \
           --url https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records/$RECORD_ID \
           --header 'Content-Type: application/json' \
           --header "Authorization: Bearer $TOKEN" \
           --data $DATA_JSON
+        
+        echo "IPv6 update attempted"
 fi
 
 DATA_JSONv4="{\"type\":\"$RECORD_TYPEv4\",\"name\":\"$RECORD_NAMEv4\",\"content\":\"$PUBLIC_IPv4\"}"
 
 if [[ $CURRENT_RECORDv4 = $PUBLIC_IPv4 ]]
 then
-        echo "IPv4 was already up to date" | tee ~/cf-ddns/cf-ddns-v4.log
-        echo "$CURRENT_RECORDv4 = DNS" | tee -a ~/cf-ddns/cf-ddns-v4.log
-        echo "$PUBLIC_IPv4 = Public IP" | tee -a ~/cf-ddns/cf-ddns-v4.log
+        echo "IPv4 is OK"
 else
         curl --request PUT \
           --url https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records/$RECORD_ID \
           --header 'Content-Type: application/json' \
           --header "Authorization: Bearer $TOKEN" \
           --data $DATA_JSONv4
+        
+        echo "IPv4 update attempted"
 fi
