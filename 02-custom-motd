@@ -1,0 +1,20 @@
+#!/bin/bash
+
+[ -r /etc/lsb-release ] && . /etc/lsb-release
+
+if [ -z "$DISTRIB_DESCRIPTION" ] && [ -x /usr/bin/lsb_release ]; then
+        # Fall back to using the very slow lsb_release utility
+        DISTRIB_DESCRIPTION=$(lsb_release -s -d)
+fi
+
+CYAN=$(tput setaf 6)
+NORMAL=$(tput sgr0)
+printf "Welcome to $(tput -T xterm setaf 6)nutmeg$(tput -T xterm sgr0), running %s\n" "$DISTRIB_DESCRIPTION"
+
+printf "Current uptime: $(uptime -p | cut -c 4-)\n"
+
+printf "\nDocker information:\n"
+docker ps -a --format "table {{.Names}}\t{{.Status}}"
+
+printf "\nRAID information:\n"
+cat /proc/mdstat | tail -n +2 | head -n -1
